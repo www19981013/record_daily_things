@@ -18,7 +18,11 @@ def create_entry(payload: schemas.EntryCreate, db: Session = Depends(get_db)):
 
 @router.get("", response_model=list[schemas.EntryOut])
 def list_entries(db: Session = Depends(get_db)):
-    return db.query(models.Entry).order_by(models.Entry.created_at.desc()).all()
+    return (
+        db.query(models.Entry)
+        .order_by(models.Entry.created_at.desc(), models.Entry.id.desc())
+        .all()
+    )
 
 
 @router.delete("/{entry_id}", status_code=204)

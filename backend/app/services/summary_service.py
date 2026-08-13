@@ -66,7 +66,7 @@ def generate_summary(db: Session, period_type: str) -> models.Summary:
         models.Summary.period_type == period_type,
         models.Summary.period_start == start,
         models.Summary.period_end == end,
-    ).delete()
+    ).delete(synchronize_session=False)
 
     summary = models.Summary(
         period_type=period_type, period_start=start, period_end=end, content=content
