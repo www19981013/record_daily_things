@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { listEntries, createEntry, deleteEntry } from './api'
 import EntryInput from './components/EntryInput.vue'
 import EntryList from './components/EntryList.vue'
+import SummaryView from './components/SummaryView.vue'
 
 const entries = ref([])
 const tab = ref('record')
@@ -36,6 +37,9 @@ onMounted(refresh)
     <main v-if="tab === 'record'">
       <EntryInput @created="onCreate" />
       <EntryList :entries="entries" @delete="onDelete" />
+    </main>
+    <main v-else>
+      <SummaryView />
     </main>
   </div>
 </template>
