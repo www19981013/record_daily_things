@@ -698,6 +698,9 @@ def test_summary_uses_llm_when_configured(client, monkeypatch):
     import app.services.summary_service as svc
 
     class FakeLLM:
+        def __init__(self, *args, **kwargs):
+            pass
+
         def generate(self, prompt):
             return "AI 归类后的小结"
 
