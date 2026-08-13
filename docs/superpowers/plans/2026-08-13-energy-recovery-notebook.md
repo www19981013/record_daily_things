@@ -82,6 +82,8 @@ __pycache__/
 .env
 record.db
 dist/
+.superpowers/
+.claude/
 ```
 
 写入 `.env.example`：
