@@ -75,4 +75,17 @@ APP_PORT=32100              # 对外访问端口，可按需修改
 git pull && docker compose up -d --build
 ```
 
+### 修改配置后如何生效
+
+改完 `.env` 后，执行：
+
+```bash
+docker compose up -d    # 重新读取 .env 并重建受影响的容器
+```
+
+- 不要用 `docker compose restart`：它只是重启现有容器，**不会重新读取 `.env`**，改动不生效。
+- `up -d` 会自动判断哪些容器要重建；数据在 `./data` 卷中，重建容器不丢数据。
+- 生效范围：`APP_PORT` → 重建 frontend；`AUTH_USER` / `AUTH_PASS` → 重建 frontend（重新生成 htpasswd）；`LLM_*` → 重建 backend。
+- 可用 `docker compose config` 查看 compose 解析后的最终配置，确认改动被正确读取。
+
 > 访问已启用 HTTP Basic Auth：首次打开会弹出用户名/密码框，输入 `.env` 里的 `AUTH_USER` / `AUTH_PASS` 即可。两者必须都设置，否则 nginx 容器会启动失败。
