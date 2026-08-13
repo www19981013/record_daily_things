@@ -49,7 +49,7 @@ vim .env          # 见下方配置项
 docker compose up -d --build
 
 # 5. 验证后端
-curl http://localhost/api/health   # 应返回 {"status":"ok"}
+curl http://localhost:32100/api/health   # 应返回 {"status":"ok"}
 ```
 
 `.env` 配置项：
@@ -60,9 +60,10 @@ LLM_BASE_URL=https://api.deepseek.com
 LLM_MODEL=deepseek-chat
 AUTH_USER=admin             # 必填：访问时的登录用户名
 AUTH_PASS=你的密码            # 必填：访问时的登录密码
+APP_PORT=32100              # 对外访问端口，可按需修改
 ```
 
-最后在云服务器安全组/防火墙放行 **80** 端口，浏览器访问 `http://<服务器IP>`。
+最后在云服务器安全组/防火墙放行 **32100**（即 `APP_PORT`）端口，浏览器访问 `http://<服务器IP>:32100`。
 
 数据保存在宿主机 `./data/record.db`（SQLite 文件），备份该文件即可。
 

@@ -13,7 +13,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "80:80"
+      - "${APP_PORT:-32100}:80"
     environment:
       AUTH_USER: ${AUTH_USER:-}
       AUTH_PASS: ${AUTH_PASS:-}
