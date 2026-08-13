@@ -1,0 +1,9 @@
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.env
+record.db
+dist/
+.superpowers/
+.claude/
