@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from .. import config, models
@@ -53,7 +54,10 @@ def generate_summary(db: Session, period_type: str) -> models.Summary:
 
     if config.llm_configured():
         llm = OpenAICompatibleLLM(config.LLM_API_KEY, config.LLM_BASE_URL, config.LLM_MODEL)
-        content = llm.generate(build_summary_prompt(period_label, [e.content for e in entries]))
+        try:
+            content = llm.generate(build_summary_prompt(period_label, [e.content for e in entries]))
+        except Exception:
+            raise HTTPException(status_code=502, detail="小结生成失败，请稍后重试")
     else:
         content = concat_summary(period_label, entries)
 

@@ -25,3 +25,8 @@ def test_delete_entry(client):
 def test_delete_missing_entry_returns_404(client):
     resp = client.delete("/entries/999")
     assert resp.status_code == 404
+
+
+def test_create_entry_rejects_blank(client):
+    resp = client.post("/entries", json={"content": ""})
+    assert resp.status_code == 422

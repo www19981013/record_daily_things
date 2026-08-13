@@ -65,3 +65,22 @@ def test_summary_list_and_regenerate(client, monkeypatch):
 def test_invalid_period_type_returns_400(client):
     resp = client.post("/summaries/daily")
     assert resp.status_code == 400
+
+
+def test_summary_llm_failure_returns_502(client, monkeypatch):
+    import app.services.summary_service as svc
+
+    class FailingLLM:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def generate(self, prompt):
+            raise RuntimeError("boom")
+
+    monkeypatch.setattr(svc.config, "llm_configured", lambda: True)
+    monkeypatch.setattr(svc, "OpenAICompatibleLLM", FailingLLM)
+
+    client.post("/entries", json={"content": "一件事"})
+    resp = client.post("/summaries/weekly")
+    assert resp.status_code == 502
+    assert "小结生成失败" in resp.json()["detail"]

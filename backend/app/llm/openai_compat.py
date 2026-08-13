@@ -16,4 +16,8 @@ class OpenAICompatibleLLM:
         }
         resp = httpx.post(url, json=payload, headers=headers, timeout=60)
         resp.raise_for_status()
-        return resp.json()["choices"][0]["message"]["content"]
+        data = resp.json()
+        choices = data.get("choices") or []
+        if not choices or "message" not in choices[0]:
+            raise RuntimeError("malformed LLM response")
+        return choices[0]["message"]["content"]
